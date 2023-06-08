@@ -1,0 +1,5 @@
+requests
+adafruit_DHT
+schedule
+RPi.GPIO
+smbus2
