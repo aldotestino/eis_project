@@ -2,7 +2,7 @@ import requests
 import schedule
 import time
 import Adafruit_DHT
-from bmpsensor import BMP180
+from Adafruit_BMP import BMP085
 from datetime import datetime
 
 ALTITUDE = 232
@@ -10,14 +10,11 @@ ALTITUDE = 232
 DHT11_PIN = 17
 API_URL = "http://localhost:8080/api/data"
 
-bmp180 = BMP180(0x77)
+bmp180 = BMP085.BMP085() # used for BMP180
 
 temperatures = []
 humidities = []
 pressures = []
-
-def pressure_to_sealevel(pressure, altitutde):
-    return pressure / pow(1 - (altitutde / 44330.0), 5.255)
 
 def measure():
     global temperatures
@@ -28,7 +25,7 @@ def measure():
     while humidity is None or temperature is None:
         humidity, temperature = Adafruit_DHT.read_retry(Adafruit_DHT.DHT11, DHT11_PIN, retries=2, delay_seconds=1)
     while pressure is None:
-        pressure = round(pressure_to_sealevel(bmp180.get_pressure(), ALTITUDE) / 100, 1)
+        pressure = round(bmp180.read_sealevel_pressure(altitude_m=ALTITUDE) / 100, 1)
     print(f"{dt}: {temperature}°C, {humidity}%, {pressure}hPA")
     temperatures.append(temperature)
     humidities.append(humidity)
