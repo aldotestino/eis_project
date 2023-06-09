@@ -1,6 +1,7 @@
 from __future__ import annotations
 import datetime
 from models import Data, decode
+from sklearn.preprocessing import StandardScaler
 from fastapi import FastAPI, status, Body
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
@@ -17,7 +18,7 @@ collection = get_collection()
 SHAPE = 6
 PORT = 8080
 
-scaler: MinMaxScaler = joblib.load("scaler.save")
+scaler: StandardScaler = joblib.load("scaler.save")
 neuralNet = NeuralNet(SHAPE)
 neuralNet.load_state_dict(torch.load("model", map_location=torch.device('cpu')))
 
