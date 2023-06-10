@@ -70,7 +70,7 @@ def post_api_data(data: Data = Body(...)):
 
 @app.get("/api/prediction", status_code=status.HTTP_200_OK)
 def get_api_prediction():
-    documents = collection.find({}).sort("_id", -1).limit(3)
+    documents = collection.find({}).sort("_id", -1).limit(2)
     last_records = [decode(document) for document in documents]
     last_records.reverse()
     last_records = [{"temperature": x["temperature"], "humidity": x["humidity"], "pressure": x["pressure"]} for x in last_records]
